@@ -1,0 +1,32 @@
+function quot (x : Z, y : Z) : Z
+	//the loop condition within this function consists of r which becomes x and decrements towards y in steps of y,
+	//therefore y must be a positive number and x greater than or equal to 0
+	precondition x >= 0 /\ y > 0
+	var r : Z
+	var q : Z
+begin
+	r := x
+	//r must be equal to its assigned value of x, which must match the precondition
+	{r = x /\ x >= 0 /\ y > 0}
+	q := 0
+	//additionally, q must now be equal to its assigned value of 0
+	{r = x /\ x >= 0 /\ y > 0 /\ q = 0}
+	while r >= y do
+	//upon entering the loop, the invariant must be true alongside our initial preconditions
+	invariant x = (q * y) + r /\ x >= 0 /\ y > 0
+	begin
+		q := q + 1
+		//following this assignment, the invariant must be true when r (which is greater than or equal to y) is decremented by y
+		{x = (q * y) + (r - y) /\ x >= 0 /\ y > 0}
+		r := r - y
+		//upon exiting the loop, the conditions for which the loop was entered must be matched (invariant)
+		{x = (q * y) + r /\ x >= 0 /\ y > 0}
+		skip
+	end
+//the invariant and preconditions still remain true
+{x = (q * y) + r /\ x >= 0 /\ y > 0}
+quot := q
+//our postcondition must be met, with a substitution of our return value q (for our function quot) and for x % y (represented by our value r)
+{x = (quot * y) + r}
+skip
+end

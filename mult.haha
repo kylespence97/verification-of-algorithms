@@ -1,0 +1,30 @@
+function mult (x : Z, y : Z) : Z
+	//the loop counter within this function, i which becomes y, decrements towards 0 so cannot be less than 0
+	precondition y >= 0
+	//the return value of this function must be the product of the inputs x and y
+	postcondition mult = x * y
+	var i : Z
+	var ans : Z
+begin
+	i := y
+	//i must be equal to its assigned value of y, which must match the precondition
+	{i = y /\ y >= 0}
+	ans := 0
+	//additionally, ans must now be equal to its assigned value of 0
+	{i = y /\ y >= 0 /\ ans = 0}
+	while i != 0 do
+	//upon entering the loop, the invariant must be true and i (alongside y which initialized it) must be greater than or equal to the terminate condition
+	invariant (i * x) + ans = x * y /\ i >= 0 /\ y >= 0
+	begin
+		ans := ans + x
+		//following this assignment, the invariant must be true when i (which is greater than 0) is decremented and y is still greater than or equal to 0 
+		{((i - 1) * x) + ans = x * y /\ i > 0 /\ y >= 0}
+		i := i - 1
+		//upon exiting the loop, the conditions for which the loop was entered must be matched (invariant)
+		{(i * x) + ans = x * y /\ i >= 0 /\ y >= 0}
+		skip
+	end
+//the value that will be returned must now satisfy the precondition, the loop invariant must be true and the loop terminate condition must be true
+{ans = x * y /\ (i * x) + ans = x * y /\ i = 0}
+mult := ans
+end
